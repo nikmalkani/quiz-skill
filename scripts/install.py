@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install shared quiz and OpenCode /quiz links, or check their status."""
+"""Install shared quiz, Claude Code, and OpenCode links, or check their status."""
 
 import argparse
 import os
@@ -9,9 +9,11 @@ import sys
 
 def links():
     source = Path(__file__).resolve().parents[1]
-    config = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config")))
+    home = Path.home()
+    config = Path(os.environ.get("XDG_CONFIG_HOME", str(home / ".config")))
     opencode = Path(os.environ.get("OPENCODE_CONFIG_DIR", str(config / "opencode")))
-    return [(Path.home() / ".agents/skills/quiz", source),
+    return [(home / ".agents/skills/quiz", source),
+            (home / ".claude/skills/quiz", source),
             (opencode / "commands/quiz.md", source / "integrations/opencode/quiz.md")]
 
 
@@ -41,7 +43,7 @@ def main():
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.symlink_to(source, target_is_directory=source.is_dir())
         print("Installed: " + str(destination))
-    print("Start a new Codex/OpenCode session in the repository you want to study.")
+    print("Start a new Codex, OpenCode, Claude Code, Cursor, or Copilot session in the repository you want to study.")
     return 0
 
 

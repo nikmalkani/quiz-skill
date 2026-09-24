@@ -17,7 +17,7 @@ For example, revisiting code you wrote a month ago with a few questions each wee
 
 ## Install
 
-Requires Python 3.9+, Git, and Codex or OpenCode with local skill support. No Python packages, API keys, or MCP servers are needed by the skill itself. Your coding agent uses its existing model connection.
+Requires Python 3.9+, Git, and a coding agent with local skill support: Codex, OpenCode, Claude Code, Cursor, or GitHub Copilot CLI/agent mode. No Python packages, API keys, or MCP servers are needed by the skill itself. Your coding agent uses its existing model connection.
 
 Download or clone this repository to a permanent local folder, then run from its root:
 
@@ -26,7 +26,7 @@ python3 scripts/install.py
 python3 scripts/install.py --check
 ```
 
-The installer links this checkout into `~/.agents/skills/quiz` for both tools, and installs an OpenCode `/quiz` command in `~/.config/opencode/commands/quiz.md`. It respects `XDG_CONFIG_HOME` and `OPENCODE_CONFIG_DIR` for OpenCode. Existing conflicting files are never overwritten. Keep the checkout in place because the installation uses symlinks. Supported installer platforms: macOS and Linux.
+The installer links this checkout into `~/.agents/skills/quiz` (Codex, Cursor, and local GitHub Copilot), `~/.claude/skills/quiz` (Claude Code), and installs an OpenCode `/quiz` command in `~/.config/opencode/commands/quiz.md`. It respects `XDG_CONFIG_HOME` and `OPENCODE_CONFIG_DIR` for OpenCode. Existing conflicting files are never overwritten. Keep the checkout in place because the installation uses symlinks. Supported installer platforms: macOS and Linux.
 
 No extra Codex plugin manifest is necessary for this local skill installation. `agents/openai.yaml` supplies optional Codex display metadata; the shared behavior is in `SKILL.md`.
 
@@ -38,10 +38,17 @@ Open the repository you want to learn in your coding agent, then start a new ses
 | --- | --- | --- |
 | Codex | Type `$` and search for `quiz`; CLI/IDE also support `/skills` | `$quiz` |
 | OpenCode | Type `/` and search for `quiz` | `/quiz` |
+| Claude Code | Type `/` and search for `quiz` | `/quiz` |
+| Cursor Agent | Type `/` and search for `quiz` | `/quiz` |
+| GitHub Copilot CLI | Type `/` and search for `quiz` | `/quiz` |
 
-Codex invocation UI varies by client; `$quiz` is the documented skill mention. This package supplies the exact `/quiz` command for OpenCode. Reply to the resulting question in the same conversation with one letter. It accepts uppercase too. No second question is asked automatically.
+Codex invocation UI varies by client; `$quiz` is the documented skill mention. This package supplies the exact `/quiz` command for OpenCode; the other tools discover `SKILL.md` directly. In Copilot's VS Code agent mode, ask it to use the `quiz` skill if no slash-command picker is shown. Reply to the resulting question in the same conversation with one letter. It accepts uppercase too. No second question is asked automatically.
 
-To check the installed files, run `python3 scripts/install.py --check` from this checkout. This checks links, not an already-running agent's cached skill list. OpenCode can also list discovered skills with `opencode debug skill`. If discovery fails, restart the agent, check skill permissions, and check for another skill or command named `quiz` in the current project.
+To check the installed files, run `python3 scripts/install.py --check` from this checkout. This checks links, not an already-running agent's cached skill list. OpenCode can also list discovered skills with `opencode debug skill`. If discovery fails, restart the agent, check skill permissions, and check for another skill or command named `quiz` in the current project. Local personal-skill links are not automatically available to Cursor Cloud Agents, Claude cloud sessions, or GitHub Copilot's cloud agent; those environments need the skill installed or committed in a location they can access.
+
+## Using it on a work computer
+
+The repository is MIT-licensed, but your employer's software-installation, repository-access, and AI-tool policies still govern whether you may install or use it at work. Ask your security/IT team if those policies are unclear. The sampler runs locally and writes no quiz state, but your coding agent reads selected source to build a question and may send that source to its configured model provider. The sampler's secret-file filters are heuristics, not a data-loss-prevention boundary. Use only an employer-approved agent/account for confidential work code, and do not put the skill or generated questions into a work repository or cloud session without permission.
 
 ## How randomness works
 
@@ -85,4 +92,4 @@ python3 scripts/sample.py --repo .
 
 The tests use temporary synthetic Git repositories. They check exclusion behavior, sampling variation, empty-repository handling, and that sampling leaves repository contents unchanged. They do not prove every model follows the conversational instructions. To check those, invoke the skill, answer once correctly and once incorrectly, and verify the exact feedback and stopping behavior.
 
-Sources for installation conventions: [Codex skills](https://learn.chatgpt.com/docs/build-skills), [OpenCode skills](https://opencode.ai/docs/skills), [OpenCode commands](https://opencode.ai/docs/commands).
+Sources for installation conventions: [Codex skills](https://learn.chatgpt.com/docs/build-skills), [OpenCode skills](https://opencode.ai/docs/skills), [OpenCode commands](https://opencode.ai/docs/commands), [Claude Code skills](https://code.claude.com/docs/en/skills), [Cursor skills](https://cursor.com/docs/skills), and [GitHub Copilot skills](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills).
